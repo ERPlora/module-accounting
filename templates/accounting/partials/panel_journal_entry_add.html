@@ -1,0 +1,62 @@
+{% load djicons i18n %}
+
+<div class="side-sheet-header">
+    <h3 class="sheet-title">{% trans "Add Journalentry" %}</h3>
+    <button class="sheet-close" @click="closePanel()">{% icon "close-outline" %}</button>
+</div>
+
+<div class="side-sheet-content">
+    <form id="add-journal_entry-form"
+          hx-post="{% url 'accounting:journal_entry_add' %}"
+          hx-target="#datatable-body"
+          hx-swap="innerHTML"
+          @htmx:after-request="closePanel()"
+          class="flex flex-col gap-4 p-6">
+        {% csrf_token %}
+
+        {% if error %}
+        <div class="callout callout-error">
+            <div class="callout-content"><span class="callout-text">{{ error }}</span></div>
+        </div>
+        {% endif %}
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Entry Number" %}</label>
+            <input type="text" name="entry_number" class="input input-sm w-full" placeholder="{% trans 'Entry Number' %}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Date" %}</label>
+            <input type="date" name="date" class="input input-sm w-full">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Description" %}</label>
+            <textarea name="description" class="textarea textarea-sm w-full" rows="3"></textarea>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Status" %}</label>
+            <input type="text" name="status" class="input input-sm w-full" placeholder="{% trans 'Status' %}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Total Debit" %}</label>
+            <input type="number" name="total_debit" class="input input-sm w-full" step="0.01" placeholder="0">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Total Credit" %}</label>
+            <input type="number" name="total_credit" class="input input-sm w-full" step="0.01" placeholder="0">
+        </div>
+    </form>
+</div>
+
+<div class="side-sheet-footer">
+    <div class="flex justify-end gap-2">
+        <button type="button" class="btn btn-ghost btn-sm" @click="closePanel()">{% trans "Cancel" %}</button>
+        <button type="submit" form="add-journal_entry-form" class="btn btn-sm color-primary">
+            {% icon "add-outline" %} {% trans "Add" %}
+        </button>
+    </div>
+</div>

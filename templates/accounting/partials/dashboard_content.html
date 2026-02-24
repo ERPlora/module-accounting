@@ -1,87 +1,79 @@
-        {% load djicons i18n %}
+{% load djicons i18n %}
 
-        <div class="p-4">
+<div class="p-4">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">{% trans "Accounting" %}</h1>
+        <p class="text-sm mt-1 opacity-60">{% trans "Chart of accounts, journal entries, balance and P&L" %}</p>
+    </div>
 
-            <!-- Welcome Card -->
-            <div class="card mb-6">
-                <div class="card-body p-6">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                            {% icon "calculator-outline" css_class="text-2xl text-primary" %}
-                        </div>
-                        <div>
-                            <h2 class="text-lg font-semibold">{% trans "Accounting" %}</h2>
-                            <p class="text-sm text-base-content/60">{% trans "Chart of accounts, journal entries, balance and P&L" %}</p>
-                        </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                        {% icon "cube-outline" css_class="text-xl text-primary" %}
+                    </div>
+                    <div>
+                        <div class="text-xs opacity-60">{% trans "Total Accounts" %}</div>
+                        <div class="text-xl font-semibold">{{ total_accounts }}</div>
                     </div>
                 </div>
             </div>
-
-            <!-- Quick Actions -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">{% icon "flash-outline" css_class="text-primary" %} {% trans "Quick Actions" %}</h3>
-                </div>
-                <div class="card-body p-0">
-                    <div class="list">
-        <a hx-get="{% url 'accounting:accounts' %}"
-   hx-target="#main-content-area"
-   hx-push-url="true"
-   class="list-item list-item-clickable">
-    <div class="list-item-start">
-        {% icon "calculator-outline" css_class="text-xl text-primary" %}
-    </div>
-    <div class="list-item-content">
-        <div class="list-item-label">{% trans "Accounts" %}</div>
-    </div>
-    <div class="list-item-end">
-        <span class="list-item-chevron"></span>
-    </div>
-</a>
-<a hx-get="{% url 'accounting:journal' %}"
-   hx-target="#main-content-area"
-   hx-push-url="true"
-   class="list-item list-item-clickable">
-    <div class="list-item-start">
-        {% icon "book-outline" css_class="text-xl text-primary" %}
-    </div>
-    <div class="list-item-content">
-        <div class="list-item-label">{% trans "Journal" %}</div>
-    </div>
-    <div class="list-item-end">
-        <span class="list-item-chevron"></span>
-    </div>
-</a>
-<a hx-get="{% url 'accounting:reports' %}"
-   hx-target="#main-content-area"
-   hx-push-url="true"
-   class="list-item list-item-clickable">
-    <div class="list-item-start">
-        {% icon "bar-chart-outline" css_class="text-xl text-primary" %}
-    </div>
-    <div class="list-item-content">
-        <div class="list-item-label">{% trans "Reports" %}</div>
-    </div>
-    <div class="list-item-end">
-        <span class="list-item-chevron"></span>
-    </div>
-</a>
-<a hx-get="{% url 'accounting:settings' %}"
-   hx-target="#main-content-area"
-   hx-push-url="true"
-   class="list-item list-item-clickable">
-    <div class="list-item-start">
-        {% icon "settings-outline" css_class="text-xl text-primary" %}
-    </div>
-    <div class="list-item-content">
-        <div class="list-item-label">{% trans "Settings" %}</div>
-    </div>
-    <div class="list-item-end">
-        <span class="list-item-chevron"></span>
-    </div>
-</a>
-                    </div>
-                </div>
-            </div>
-
         </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-success/10 rounded-xl flex items-center justify-center">
+                        {% icon "checkmark-circle-outline" css_class="text-xl text-success" %}
+                    </div>
+                    <div>
+                        <div class="text-xs opacity-60">{% trans "Total JournalEntrys" %}</div>
+                        <div class="text-xl font-semibold">{{ total_journal_entries }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">{% trans "Quick Actions" %}</h3>
+        </div>
+        <div class="list list-inset">
+            <a class="list-item list-item-clickable"
+               hx-get="{% url 'accounting:accounts_list' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true">
+                <div class="list-item-start">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        {% icon "list-outline" css_class="text-xl text-primary" %}
+                    </div>
+                </div>
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Manage Accounts" %}</div>
+                    <div class="list-item-note">{% trans "View and manage all accounts" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <span class="list-item-chevron">{% icon "chevron-forward-outline" %}</span>
+                </div>
+            </a>
+            <a class="list-item list-item-clickable"
+               hx-get="{% url 'accounting:journal_entries_list' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true">
+                <div class="list-item-start">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        {% icon "list-outline" css_class="text-xl text-primary" %}
+                    </div>
+                </div>
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Manage JournalEntrys" %}</div>
+                    <div class="list-item-note">{% trans "View and manage all journal entries" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <span class="list-item-chevron">{% icon "chevron-forward-outline" %}</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
