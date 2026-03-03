@@ -35,3 +35,21 @@ PERMISSIONS = [
 'accounting.view_reports',
 'accounting.manage_settings',
 ]
+
+ROLE_PERMISSIONS = {
+    "admin": ["*"],
+    "manager": [
+        "add_account",
+        "add_journalentry",
+        "change_account",
+        "change_journalentry",
+        "view_account",
+        "view_journalentry",
+        "view_reports",
+    ],
+    "employee": [
+        "add_account",
+        "view_account",
+        "view_journalentry",
+    ],
+}
