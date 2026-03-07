@@ -1,0 +1,65 @@
+{% load djicons i18n %}
+<div data-back-url="{% url 'accounting:accounts_list' %}" hidden></div>
+
+<div class="p-4">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">{% trans "Add Account" %}</h1>
+        <div class="flex gap-2">
+            <a class="btn btn-ghost btn-sm"
+               hx-get="{% url 'accounting:accounts_list' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" form="add-account-form" class="btn btn-sm color-primary">
+                {% icon "checkmark-outline" %}
+                {% trans "Save" %}
+            </button>
+        </div>
+    </div>
+
+        {% if error %}
+        <div class="callout callout-error">
+            <div class="callout-content"><span class="callout-text">{{ error }}</span></div>
+        </div>
+        {% endif %}
+    <!-- Form -->
+    <form id="add-account-form"
+          hx-post="{% url 'accounting:account_add' %}" class="max-w-2xl">
+        {% csrf_token %}
+        <div class="card mb-4">
+            <div class="card-body flex flex-col gap-4">
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Code" %}</label>
+                <input type="text" name="code" class="input input-sm w-full" placeholder="{% trans 'Code' %}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Name" %}</label>
+                <input type="text" name="name" class="input input-sm w-full" placeholder="{% trans 'Name' %}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Account Type" %}</label>
+                <select name="account_type" class="select select-sm w-full">
+                <option value="">{% trans "Select..." %}</option>
+                </select>
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Balance" %}</label>
+                <input type="number" name="balance" class="input input-sm w-full" step="0.01" placeholder="0">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Is Active" %}</label>
+                <label class="toggle color-success">
+                <input type="checkbox" name="is_active">
+                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

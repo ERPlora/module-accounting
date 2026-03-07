@@ -3,6 +3,8 @@ Accounting Module Views
 """
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
+from django.http import HttpResponse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render as django_render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -114,6 +116,7 @@ def accounts_list(request):
     }
 
 @login_required
+@htmx_view('accounting/pages/account_add.html', 'accounting/partials/account_add_content.html')
 def account_add(request):
     hub_id = request.session.get('hub_id')
     if request.method == 'POST':
@@ -129,10 +132,13 @@ def account_add(request):
         obj.balance = balance
         obj.is_active = is_active
         obj.save()
-        return _render_accounts_list(request, hub_id)
-    return django_render(request, 'accounting/partials/panel_account_add.html', {})
+        response = HttpResponse(status=204)
+        response['HX-Redirect'] = reverse('accounting:accounts_list')
+        return response
+    return {}
 
 @login_required
+@htmx_view('accounting/pages/account_edit.html', 'accounting/partials/account_edit_content.html')
 def account_edit(request, pk):
     hub_id = request.session.get('hub_id')
     obj = get_object_or_404(Account, pk=pk, hub_id=hub_id, is_deleted=False)
@@ -144,7 +150,7 @@ def account_edit(request, pk):
         obj.is_active = request.POST.get('is_active') == 'on'
         obj.save()
         return _render_accounts_list(request, hub_id)
-    return django_render(request, 'accounting/partials/panel_account_edit.html', {'obj': obj})
+    return {'obj': obj}
 
 @login_required
 @require_POST
@@ -262,6 +268,7 @@ def journal_entries_list(request):
     }
 
 @login_required
+@htmx_view('accounting/pages/journal_entry_add.html', 'accounting/partials/journal_entry_add_content.html')
 def journal_entry_add(request):
     hub_id = request.session.get('hub_id')
     if request.method == 'POST':
@@ -279,10 +286,13 @@ def journal_entry_add(request):
         obj.total_debit = total_debit
         obj.total_credit = total_credit
         obj.save()
-        return _render_journal_entries_list(request, hub_id)
-    return django_render(request, 'accounting/partials/panel_journal_entry_add.html', {})
+        response = HttpResponse(status=204)
+        response['HX-Redirect'] = reverse('accounting:reports')
+        return response
+    return {}
 
 @login_required
+@htmx_view('accounting/pages/journal_entry_edit.html', 'accounting/partials/journal_entry_edit_content.html')
 def journal_entry_edit(request, pk):
     hub_id = request.session.get('hub_id')
     obj = get_object_or_404(JournalEntry, pk=pk, hub_id=hub_id, is_deleted=False)
@@ -295,7 +305,7 @@ def journal_entry_edit(request, pk):
         obj.total_credit = request.POST.get('total_credit', '0') or '0'
         obj.save()
         return _render_journal_entries_list(request, hub_id)
-    return django_render(request, 'accounting/partials/panel_journal_entry_edit.html', {'obj': obj})
+    return {'obj': obj}
 
 @login_required
 @require_POST
